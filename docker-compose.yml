@@ -1,0 +1,60 @@
+services:
+  # Serviço para o banco de dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: gestao_eventos
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      retries: 10
+      timeout: 5s
+
+  # Serviço para a aplicação backend (Spring Boot)
+  backend:
+    build: ./backend
+    container_name: springboot-app
+    restart: always
+    environment:
+      # Variáveis de ambiente para a conexão com o banco de dados
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/gestao_eventos?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_FLYWAY_URL: jdbc:mysql://db:3306/gestao_eventos?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_FLYWAY_USER: root
+      SPRING_FLYWAY_PASSWORD: admin
+      SPRING_FLYWAY_ENABLED: true
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
+  # Serviço para a aplicação frontend (Angular)
+  frontend:
+    build: ./frontend
+    container_name: angular-app
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge
