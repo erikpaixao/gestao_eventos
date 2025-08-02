@@ -5,8 +5,8 @@ services:
     container_name: mysql-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: gestao_eventos
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     volumes:
@@ -25,13 +25,13 @@ services:
     restart: always
     environment:
       # Variáveis de ambiente para a conexão com o banco de dados
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/gestao_eventos?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_FLYWAY_URL: jdbc:mysql://db:3306/gestao_eventos?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_FLYWAY_USER: root
-      SPRING_FLYWAY_PASSWORD: admin
-      SPRING_FLYWAY_ENABLED: true
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_FLYWAY_URL: ${SPRING_FLYWAY_URL}
+      SPRING_FLYWAY_USER: ${SPRING_FLYWAY_USER}
+      SPRING_FLYWAY_PASSWORD: ${SPRING_FLYWAY_PASSWORD}
+      SPRING_FLYWAY_ENABLED: ${SPRING_FLYWAY_ENABLED}
     depends_on:
       db:
         condition: service_healthy
