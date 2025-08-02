@@ -3,5 +3,6 @@
   <p>{{ data.message }}</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button color="primary" (click)="close()">OK</button>
+  <button mat-button color="warn" (click)="close(false)">NAO</button>
+  <button mat-button color="primary" (click)="close(true)">SIM</button>
 </mat-dialog-actions>

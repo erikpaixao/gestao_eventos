@@ -15,7 +15,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideNgToast } from 'ng-angular-popup';
 import { routes } from './app.routes';
-import { LoadingInterceptor } from './interceptors/loading-interceptor';
+import { LoadingInterceptor } from './core/interceptors/loading-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

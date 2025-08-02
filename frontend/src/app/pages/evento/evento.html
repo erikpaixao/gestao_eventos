@@ -1,0 +1,91 @@
+<mat-toolbar color="primary">
+  <span
+    >{{
+      data ? (isViewMode ? "Visualizar " : "Editar ") : "Novo "
+    }}
+    Evento</span
+  >
+</mat-toolbar>
+
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="salvar()">
+    <mat-card>
+      <mat-card-content class="content">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo" [readonly]="isViewMode" />
+          <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+            O título é obrigatório.
+          </mat-error>
+          <mat-error *ngIf="form.get('titulo')?.hasError('minlength')">
+            O título deve ter no mínimo 3 caracteres.
+          </mat-error>
+          <mat-error *ngIf="form.get('titulo')?.hasError('maxlength')">
+            O título deve ter no máximo 100 caracteres.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Descrição</mat-label>
+          <textarea
+            matInput
+            formControlName="descricao"
+            [readonly]="isViewMode"
+          ></textarea>
+          <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+            A descrição é obrigatória.
+          </mat-error>
+          <mat-error *ngIf="form.get('descricao')?.hasError('minlength')">
+            A descrição deve ter no mínimo 10 caracteres.
+          </mat-error>
+          <mat-error *ngIf="form.get('descricao')?.hasError('maxlength')">
+            A descrição deve ter no máximo 1000 caracteres.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Local</mat-label>
+          <input matInput formControlName="local" [readonly]="isViewMode" />
+          <mat-error *ngIf="form.get('local')?.hasError('required')">
+            O local é obrigatório.
+          </mat-error>
+          <mat-error *ngIf="form.get('local')?.hasError('minlength')">
+            O local deve ter no mínimo 3 caracteres.
+          </mat-error>
+          <mat-error *ngIf="form.get('local')?.hasError('maxlength')">
+            O local deve ter no máximo 200 caracteres.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Data do Evento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataEvento"
+            [min]="minDate"
+            [readonly]="isViewMode"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+            [disabled]="isViewMode"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions align="end" class="footer">
+        <button mat-button type="button" (click)="voltar()">Cancelar</button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid || isViewMode"
+        >
+          Salvar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

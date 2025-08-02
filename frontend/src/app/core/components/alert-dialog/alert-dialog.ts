@@ -15,7 +15,7 @@ export class AlertDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { message: string }
   ) {}
 
-  close(): void {
-    this.dialogRef.close();
+  close(result: boolean): void {
+    this.dialogRef.close(result);
   }
 }

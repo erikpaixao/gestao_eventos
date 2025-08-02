@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { NgToastService } from 'ng-angular-popup';
-import { AlertDialogComponent } from '../../components/alert-dialog/alert-dialog';
-import { EventDialogComponent } from '../../components/evento-dialog/evento-dialog';
+
+import { Router } from '@angular/router';
+import { AlertDialogComponent } from '../../core/components/alert-dialog/alert-dialog';
+import { MATERIAL_MODULES } from '../../core/shared/material';
 import { Evento } from '../../models/evento.model';
 import { EventoService } from '../../services/evento/evento';
-import { MATERIAL_MODULES } from './../../shared/material';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,8 @@ export class Home implements OnInit {
   constructor(
     private eventoService: EventoService,
     private dialog: MatDialog,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -58,43 +60,18 @@ export class Home implements OnInit {
   }
 
   openCreateDialog() {
-    const dialogRef = this.dialog.open(EventDialogComponent, {
-      data: null,
-    });
-
-    dialogRef.afterClosed().subscribe((result: Evento) => {
-      if (result) {
-        this.eventoService.create(result).subscribe({
-          next: () => {
-            this.openToastSucess(`Dados criados com sucesso!`);
-            this.loadEvents();
-          },
-          error: (err) => {
-            console.error('Erro ao criar evento:', err);
-            this.openToastError(`Erro ao criar evento: ${err.error.erro}`);
-          },
-        });
-      }
-    });
+    this.router.navigate(['evento']);
   }
 
   openEditDialog(event: Evento) {
-    const dialogRef = this.dialog.open(EventDialogComponent, {
-      data: event,
+    this.router.navigate(['evento', event.id], {
+      queryParams: { readonly: false, data: JSON.stringify(event) },
     });
+  }
 
-    dialogRef.afterClosed().subscribe((result: Evento) => {
-      if (result) {
-        this.eventoService.update(event.id, result).subscribe({
-          next: () => {
-            this.openToastSucess(`Dados atualizados com sucesso!`);
-            this.loadEvents();
-          },
-          error: (err) => {
-            this.openToastError(`Erro ao atualizar evento: ${err.error.erro}`);
-          },
-        });
-      }
+  openViewDialog(event: Evento) {
+    this.router.navigate(['evento', event.id], {
+      queryParams: { readonly: true, data: JSON.stringify(event) },
     });
   }
 
